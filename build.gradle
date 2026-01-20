@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'demo'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA 제거
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1' // JWT 생성용 (구버전이 교육용으로 단순함)
+    implementation 'org.mindrot:jbcrypt:0.4' // BCrypt 비밀번호 해싱용 (Spring Security 없이 사용)
+    implementation 'javax.xml.bind:jaxb-api:2.3.1' // Java 9+ 호환성(JJWT 0.9.1 필수)
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    implementation 'javax.activation:javax.activation-api:1.2.0'
+    compileOnly 'org.projectlombok:lombok'
+    implementation 'com.fasterxml.jackson.core:jackson-databind' // JSON 처리를 위한 Jackson 라이브러리 (Spring Web에 포함되어 있지만 명시적으로 확인)
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // Gradle 9/JUnit 플랫폼 실행기 보강
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
