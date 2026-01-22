@@ -53,6 +53,28 @@ public class MemberController {
         return new MemberDTO.Result<>(collect);
     }
 
+    // 2-1. 단일 회원 조회 API
+    // HTTP Method: GET
+    // URL: /api/members/{id}
+    @GetMapping("/members/{id}")
+    public MemberDTO.Result<?> findMemberById(@PathVariable Long id) {
+        // 서비스 계층에서 ID로 회원 조회
+        Member findMember = memberService.findOne(id);
+
+        // 만약 해당 ID의 회원이 없다면 에러 메시지 반환
+        if (findMember == null) {
+            return new MemberDTO.Result<>("조회 실패: ID가 " + id + "인 회원을 찾을 수 없습니다.");
+        }
+
+        // 조회 성공 시 DTO로 변환하여 반환
+        MemberDTO.Response.Member response = new MemberDTO.Response.Member(
+                findMember.getId(),
+                findMember.getUsername(),
+                findMember.getName());
+
+        return new MemberDTO.Result<>(response);
+    }
+
     // 3. 회원 정보 수정 API
     // HTTP Method: PUT
     // URL: /api/members/{id}
