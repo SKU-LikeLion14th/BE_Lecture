@@ -47,9 +47,9 @@ public class MemberDTO {
         @Data
         @NoArgsConstructor // ⭐ 필수! (입력용: JSON → 객체 변환에 필요)
         public static class Create {
-            private String username;
+            private String userId;
             private String password;
-            private String name;
+            private String username;
         }
 
         /**
@@ -58,7 +58,7 @@ public class MemberDTO {
         @Data
         @NoArgsConstructor // ⭐ 필수! (기계가 new 할 용도)
         public static class Update {
-            private String name;
+            private String username;
             private String password;
         }
 
@@ -68,7 +68,7 @@ public class MemberDTO {
         @Data
         @NoArgsConstructor // ⭐ 필수!
         public static class Login {
-            private String username;
+            private String userId;
             private String password;
         }
     }
@@ -84,8 +84,8 @@ public class MemberDTO {
         @AllArgsConstructor // ⭐ 필수! (출력용: 개발자가 바로 값 순서대로 생성)
         public static class Member {
             private Long id;
-            private String username;
-            private String name; // 비밀번호는 노출X
+            private String userId;
+            private String username; // 비밀번호는 노출X
         }
     }
 

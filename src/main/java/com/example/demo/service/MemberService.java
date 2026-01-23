@@ -2,20 +2,30 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Member;
 import com.example.demo.repository.MemberRepository;
+import com.example.demo.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 // import org.springframework.transaction.annotation.Transactional; // JPA 트랜잭션 제거
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
+
+    //토큰을 멤버 객체로 반환
+    public Member tokenToMember(String token){
+        return memberRepository.findByUserId(jwtUtil.getClaimsFromJwt(token).getSubject());
+    }
 
     // [C] 회원가입
-    public Long join(Member member) {
+    @Transactional
+    public Long signUp(Member member) {
         // 비밀번호를 BCrypt로 해싱하여 저장
         String hashedPassword = BCrypt.hashpw(member.getPassword(), BCrypt.gensalt());
         member.setPassword(hashedPassword);
@@ -24,20 +34,21 @@ public class MemberService {
     }
 
     // [R] 조회
-    public List<Member> findMembers() {
+    public List<Member> findAll() {
         return memberRepository.findAll();
     }
 
-    public Member findOne(Long memberId) {
-        return memberRepository.findOne(memberId);
+    public Member findById(Long memberId) {
+        return memberRepository.findById(memberId);
     }
 
     // [U] 수정(변경 감지 사용 불가 -> 명시적 저장 필요)
+    @Transactional
     public void update(Long id, String newName, String newPassword) {
-        Member member = memberRepository.findOne(id);
+        Member member = memberRepository.findById(id);
 
         // 데이터 수정
-        member.setName(newName);
+        member.setUsername(newName);
         if (newPassword != null && !newPassword.isEmpty()) {
             // 비밀번호 변경 시 BCrypt로 해싱하여 저장
             String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
@@ -50,17 +61,27 @@ public class MemberService {
     }
 
     // [D] 삭제
+    @Transactional
     public void delete(Long id) {
         memberRepository.remove(id);
     }
 
+
     // 로그인 (BCrypt 비밀번호 검증)
-    public Member login(String username, String password) {
-        Member member = memberRepository.findByUsername(username);
+    public String login(String userId, String password) {
+        Member member = memberRepository.findByUserId(userId);
         // BCrypt로 해싱된 비밀번호와 입력한 비밀번호를 비교
         if (member != null && BCrypt.checkpw(password, member.getPassword())) {
-            return member;
+            String token = jwtUtil.generateJwt(member.getUserId(), member.getUsername());
+            return token;
         }
-        return null;
+        return "아이디와 비밀번호를 확인하세요";
     }
+
+
+    public Member findByUserId(String userId){
+        return memberRepository.findByUserId(userId);
+    }
+
+
 }

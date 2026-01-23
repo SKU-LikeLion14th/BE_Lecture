@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface MemberRepository {
     void save(Member member);
-    Member findOne(Long id);
+    Member findById(Long id);
     List<Member> findAll();
     void remove(Long id);
-    Member findByUsername(String username);
+    Member findByUserId(String userId);
 }
