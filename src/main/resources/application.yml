@@ -12,6 +12,6 @@ spring:
         show_sql: true
         format_sql: true
 jwt:
-  base64Secret: "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
+  base64Secret: "kYMB4HL4KdcRoHrWowjXwWMDVvodcKKbpTdHz8g6o7tZa6IqReBCxvnnJcaKmAjXjIK5tWz5V/spXf3T4F/S+g=="
 
 #    database-platform:

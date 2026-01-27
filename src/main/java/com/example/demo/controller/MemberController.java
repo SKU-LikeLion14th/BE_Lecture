@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.DTO.MemberDTO;
 import com.example.demo.domain.Member;
 import com.example.demo.service.MemberService;
-import com.example.demo.utils.JwtUtil;
+import com.example.demo.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MemberController {
 
     private final MemberService memberService;
-    private final JwtUtil jwtUtil;// 서비스 계층 의존성 주입
+    private final JwtUtility jwtUtility;// 서비스 계층 의존성 주입
 
     // 1. 회원가입 API
     // HTTP Method: POST
@@ -94,7 +94,7 @@ public class MemberController {
             @RequestBody MemberDTO.Request.Update request, // Body에 있는 JSON 데이터를 객체로 매핑
             @RequestHeader("Authorization") String token) { // 헤더에서
 
-        if(!jwtUtil.validateJwt(token)){
+        if(!jwtUtility.validateJwt(token)){
             return new MemberDTO.Result<>("유효한 토큰이 아닙니다.");
         }
 
@@ -121,7 +121,7 @@ public class MemberController {
     @DeleteMapping("/members")
     public MemberDTO.Result<String> deleteMember(@RequestHeader("Authorization") String token) {
 
-        if(!jwtUtil.validateJwt(token)){
+        if(!jwtUtility.validateJwt(token)){
             return new MemberDTO.Result<>("유효한 토큰이 아닙니다.");
         }
 

@@ -1,9 +1,7 @@
 package com.example.demo.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.example.demo.enums.RoleType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +17,9 @@ public class Member {
     private String userId; // 로그인id
     private String password;
     private String username; // 사용자 이름
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType = RoleType.MEMBER;
 
     //@NoArgsConstructor 어노테이션 덕분에 기본 생성자를 일일이 쓸 필요x
 /*    public Member() {

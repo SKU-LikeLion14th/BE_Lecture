@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Member;
 import com.example.demo.repository.MemberRepository;
-import com.example.demo.utils.JwtUtil;
+import com.example.demo.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,11 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtUtility jwtUtility;
 
     //토큰을 멤버 객체로 반환
     public Member tokenToMember(String token){
-        return memberRepository.findByUserId(jwtUtil.getClaimsFromJwt(token).getSubject());
+        return memberRepository.findByUserId(jwtUtility.getClaimsFromJwt(token).getSubject());
     }
 
     // [C] 회원가입
@@ -72,7 +72,7 @@ public class MemberService {
         Member member = memberRepository.findByUserId(userId);
         // BCrypt로 해싱된 비밀번호와 입력한 비밀번호를 비교
         if (member != null && BCrypt.checkpw(password, member.getPassword())) {
-            String token = jwtUtil.generateJwt(member.getUserId(), member.getUsername());
+            String token = jwtUtility.generateJwt(member.getUserId(), member.getUsername(), member.getRoleType());
             return token;
         }
         return "아이디와 비밀번호를 확인하세요";

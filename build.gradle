@@ -25,25 +25,39 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // JPA 제거
+    // Spring
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mindrot:jbcrypt:0.4' // BCrypt 비밀번호 해싱용 (Spring Security 없이 사용)
-    implementation 'javax.xml.bind:jaxb-api:2.3.1' // Java 9+ 호환성(JJWT 0.9.1 필수)
-    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
-    implementation 'javax.activation:javax.activation-api:1.2.0'
-    compileOnly 'org.projectlombok:lombok'
-    implementation 'com.fasterxml.jackson.core:jackson-databind' // JSON 처리를 위한 Jackson 라이브러리 (Spring Web에 포함되어 있지만 명시적으로 확인)
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // Gradle 9/JUnit 플랫폼 실행기 보강
 
-    //DB
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    // Security
+    implementation 'org.springframework.boot:spring-boot-starter-security:3.2.0'
 
-    // JJWT (Java JWT) 라이브러리
+    // Password (BCrypt)
+    implementation 'org.mindrot:jbcrypt:0.4'
+
+    // JWT (JJWT)
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Legacy (Java 9+ / JJWT 0.9.x 대응)
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+    implementation 'javax.activation:javax.activation-api:1.2.0'
+
+    // JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Test
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // DB
+    runtimeOnly 'com.mysql:mysql-connector-j'
 }
 
 tasks.named('test') {

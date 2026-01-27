@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.DTO.ArticleDTO;
 import com.example.demo.domain.Article;
 import com.example.demo.service.ArticleService;
-import com.example.demo.utils.JwtUtil;
+import com.example.demo.security.JwtUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +15,11 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final JwtUtil jwtUtil;
+    private final JwtUtility jwtUtility;
 
     @PostMapping("/article/add")
     public ArticleDTO.ArticleRes createArticle(@RequestHeader("Authorization") String token, @RequestBody ArticleDTO.AddArticleReq request){
-        if(!jwtUtil.validateJwt(token)){
+        if(!jwtUtility.validateJwt(token)){
             return null;
         }
         Article article = articleService.addArticle(token, request.getTitle(), request.getContent());
@@ -28,7 +28,7 @@ public class ArticleController {
 
     @PutMapping("/article/update")
     public ArticleDTO.ArticleRes updateArticle(@RequestHeader("Authorization") String token, @RequestBody ArticleDTO.ArticleReq request){
-        if(!jwtUtil.validateJwt(token)){
+        if(!jwtUtility.validateJwt(token)){
             return null;
         }
         Article article = articleService.updateArticle(request.getArticleId(), request.getTitle(), request.getContent(), token);
@@ -37,7 +37,7 @@ public class ArticleController {
 
     @DeleteMapping("/article/{articleId}")
     public String deleteArticle(@RequestHeader("Authorization") String token, @PathVariable("articleId") Long articleId){
-        if(!jwtUtil.validateJwt(token)){
+        if(!jwtUtility.validateJwt(token)){
             return "유효하지 않은 토큰입니다.";
         }
         return articleService.deleteArticle(articleId, token);

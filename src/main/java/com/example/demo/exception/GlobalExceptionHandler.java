@@ -8,6 +8,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(HandleJwtException.class)
+    public ResponseEntity<String> handleJwt(HandleJwtException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED) // 보통 인증 문제면 401이기 때문에 UNAUTHORIZED사용
+                .body(e.getMessage());
+    }
+
     @ExceptionHandler(InvalidArticleIdException.class)
     public ResponseEntity<String> InvalidArticleId(InvalidArticleIdException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 articleId");
