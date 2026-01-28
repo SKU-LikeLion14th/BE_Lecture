@@ -12,12 +12,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/article")
 public class ArticleController {
 
     private final ArticleService articleService;
     private final JwtUtility jwtUtility;
 
-    @PostMapping("/article/add")
+    @PostMapping("/add")
     public ArticleDTO.ArticleRes createArticle(@RequestHeader("Authorization") String token, @RequestBody ArticleDTO.AddArticleReq request){
         if(!jwtUtility.validateJwt(token)){
             return null;
@@ -26,7 +27,7 @@ public class ArticleController {
         return new ArticleDTO.ArticleRes(article);
     }
 
-    @PutMapping("/article/update")
+    @PutMapping("/update")
     public ArticleDTO.ArticleRes updateArticle(@RequestHeader("Authorization") String token, @RequestBody ArticleDTO.ArticleReq request){
         if(!jwtUtility.validateJwt(token)){
             return null;
@@ -35,7 +36,7 @@ public class ArticleController {
         return new ArticleDTO.ArticleRes(article);
     }
 
-    @DeleteMapping("/article/{articleId}")
+    @DeleteMapping("/{articleId}")
     public String deleteArticle(@RequestHeader("Authorization") String token, @PathVariable("articleId") Long articleId){
         if(!jwtUtility.validateJwt(token)){
             return "유효하지 않은 토큰입니다.";
@@ -43,13 +44,13 @@ public class ArticleController {
         return articleService.deleteArticle(articleId, token);
     }
 
-    @GetMapping("/article/{articleId}")
+    @GetMapping("/{articleId}")
     public ArticleDTO.ArticleRes getArticle(@PathVariable("articleId") Long articleId){
         Article article = articleService.findById(articleId);
         return new ArticleDTO.ArticleRes(article);
     }
 
-    @GetMapping("/articles/all")
+    @GetMapping("/all")
     public List<ArticleDTO.ArticleRes> allArticleList(){
         List<ArticleDTO.ArticleRes> responseArticles = new ArrayList<>();
         for (Article article : articleService.findAll()) {
@@ -58,7 +59,7 @@ public class ArticleController {
         return responseArticles;
     }
 
-    @GetMapping("/articles/all/{memberId}")
+    @GetMapping("/all/{memberId}")
     public List<ArticleDTO.ArticleRes> writerArticleList(@PathVariable("memberId") String memberId){
         List<ArticleDTO.ArticleRes> responseArticles = new ArrayList<>();
         for (Article article : articleService.findAllByWriter(memberId)) {
