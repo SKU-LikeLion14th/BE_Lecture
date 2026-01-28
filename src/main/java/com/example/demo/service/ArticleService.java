@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final MemberService memberService;
@@ -51,7 +52,6 @@ public class ArticleService {
         } else{
             return "회원님의 게시글이 아닙니다.";
         }
-
     }
 
     public Article findById(Long articleId){

@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
@@ -10,4 +11,5 @@ public interface MemberRepository {
     List<Member> findAll();
     void remove(Long id);
     Member findByUserId(String userId);
+
 }
