@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/article")
+@RequestMapping("api/article")
 public class ArticleController {
 
     private final ArticleService articleService;
@@ -20,27 +20,18 @@ public class ArticleController {
 
     @PostMapping("/add")
     public ArticleDTO.ArticleRes createArticle(@RequestHeader("Authorization") String token, @RequestBody ArticleDTO.AddArticleReq request){
-        if(!jwtUtility.validateJwt(token)){
-            return null;
-        }
         Article article = articleService.addArticle(token, request.getTitle(), request.getContent());
         return new ArticleDTO.ArticleRes(article);
     }
 
     @PutMapping("/update")
     public ArticleDTO.ArticleRes updateArticle(@RequestHeader("Authorization") String token, @RequestBody ArticleDTO.ArticleReq request){
-        if(!jwtUtility.validateJwt(token)){
-            return null;
-        }
         Article article = articleService.updateArticle(request.getArticleId(), request.getTitle(), request.getContent(), token);
         return new ArticleDTO.ArticleRes(article);
     }
 
     @DeleteMapping("/{articleId}")
     public String deleteArticle(@RequestHeader("Authorization") String token, @PathVariable("articleId") Long articleId){
-        if(!jwtUtility.validateJwt(token)){
-            return "유효하지 않은 토큰입니다.";
-        }
         return articleService.deleteArticle(articleId, token);
     }
 

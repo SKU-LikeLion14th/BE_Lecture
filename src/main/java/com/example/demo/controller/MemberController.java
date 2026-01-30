@@ -94,9 +94,6 @@ public class MemberController {
             @RequestBody MemberDTO.Request.Update request, // Body에 있는 JSON 데이터를 객체로 매핑
             @RequestHeader("Authorization") String token) { // 헤더에서
 
-        if(!jwtUtility.validateJwt(token)){
-            return new MemberDTO.Result<>("유효한 토큰이 아닙니다.");
-        }
 
         Long id = memberService.tokenToMember(token).getId();
         memberService.update(id, request.getUsername(), request.getPassword());
@@ -120,10 +117,6 @@ public class MemberController {
     // Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
     @DeleteMapping("/members")
     public MemberDTO.Result<String> deleteMember(@RequestHeader("Authorization") String token) {
-
-        if(!jwtUtility.validateJwt(token)){
-            return new MemberDTO.Result<>("유효한 토큰이 아닙니다.");
-        }
 
         Long id = memberService.tokenToMember(token).getId();
         memberService.delete(id);

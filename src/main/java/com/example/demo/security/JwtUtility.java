@@ -79,9 +79,7 @@ public class JwtUtility {
     public boolean validateJwt(String jwt){
         try{
             // Authorization 헤더에 "Bearer "가 포함되어 있으면 제거
-            if (jwt.startsWith("Bearer ")) {
-                jwt = jwt.substring(7);
-            }
+
             // JWT 파서 생성 → 서명 키 설정 → 토큰 파싱(검증)
             // 이 과정에서 서명, 만료시간, 구조 등이 자동으로 검증됨
             Jwts.parserBuilder()

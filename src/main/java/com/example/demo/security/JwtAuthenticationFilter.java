@@ -37,20 +37,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            // 1. Authorization 헤더에서 JWT 토큰 추출
-            String jwt = resolveJwt(request);
-
-            // 2. JWT가 존재하고 유효한 경우
-            if (jwt != null && jwtUtility.validateJwt(jwt)) {
-                // 3. JWT에서 사용자 정보를 추출하여 Authentication 객체 생성
-                Authentication auth = getAuthentication(jwt);
-
-                // 4. SecurityContext에 인증 정보 설정
-                SecurityContextHolder.getContext().setAuthentication(auth);
+            String jwt = resolveJwt(request);                                   // 1. Authorization 헤더에서 JWT 토큰 추출
+            if (jwt != null && jwtUtility.validateJwt(jwt)) {                   // 2. JWT가 존재하고 유효한 경우
+                Authentication auth = getAuthentication(jwt);                   // 3. JWT에서 사용자 정보를 추출하여 Authentication 객체 생성
+                SecurityContextHolder.getContext().setAuthentication(auth);     // 4. SecurityContext에 인증 정보 설정
             }
+            filterChain.doFilter(request, response);                            // 5. 다음 필터로 요청 전달
 
-            // 5. 다음 필터로 요청 전달
-            filterChain.doFilter(request, response);
 
         } catch (HandleJwtException e) {
             // JWT 검증 실패 시 401 Unauthorized 응답
