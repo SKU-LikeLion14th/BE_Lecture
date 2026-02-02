@@ -1,6 +1,7 @@
 package com.example.demo.DTO;
 
 import com.example.demo.domain.Article;
+import com.example.demo.domain.Member;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,14 +11,14 @@ public class ArticleDTO {
     public static class ArticleRes {
         private String title;
         private String content;
-        private String writer;
+        private Member writer;
         private LocalDateTime createDate;
         private boolean isChange;
 
         public ArticleRes(Article article) {
             this.title = article.getTitle();
             this.content = article.getContent();
-            this.writer = article.getWriter().getUsername();
+            this.writer = article.getWriter();
             this.createDate = article.getCreateDate();
 
             if(article.getCreateDate().equals(article.getUpdateDate())){
